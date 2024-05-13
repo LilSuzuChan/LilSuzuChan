@@ -67,9 +67,8 @@ h2 {
 .time {
   font-family: Century Schoolbook, Century Schoolbook L, Georgia, serif;
   width: 30%;
+  height : 5%;
   margin: auto;
-  padding-top: 10%;
-  padding-bottom: 10%;
   font-size: x-large;
   text-align: center;
   background: rgba(255, 255, 255, 0.3);
