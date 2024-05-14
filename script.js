@@ -1,30 +1,25 @@
 "use strict";
 
-let data = []; // 1：爆弾、0：何もない、-1：最初にクリックされたマスと周囲
-let h, w, bomb;
-let startTime;
-let timeoutId;
-
+const height = 5; // 縦のマスの数
+const width = 5; // 横のマスの数
+const mine = 3; // 爆弾の数
 const msTable = document.getElementById("ms-table");
 const time = document.getElementById("time");
+const property = [];
 
-// 初期化
-function init() {
-  h = 5; // 縦のマスの数
-  w = 5; // 横のマスの数
-  bomb = 3; // 爆弾の数
-
-  msTable.innerHTML = "";
-  msTable.style.pointerEvents = "auto";
+/**
+ * ゲーム用のテーブルを作成する関数
+ */
+function resetGame() {
   clearTimeout(timeoutId);
 
-  // ゲームを作る
-  for (let i = 0; i < h; i++) {
+  for (let i = 0; i < height; i++) {
     const tr = document.createElement("tr");
-    for (let j = 0; j < w; j++) {
+
+    for (let j = 0; j < width; j++) {
       const td = document.createElement("td");
-      td.addEventListener("click", leftClicked);
-      td.addEventListener("contextmenu", rightClicked);
+      td.addEventListener("click", clickLeft);
+      td.addEventListener("contextmenu", clickRight);
       td.isOpen = false;
 
       // マスの色を交互に設定する
@@ -47,67 +42,72 @@ function init() {
   }
 }
 
-// 爆弾を設置
-function putBomb() {
-  for (let i = 0; i < bomb; i++) {
+/**
+ * 爆弾を設置する関数
+ */
+function setMine() {
+  for (let i = 0; i < mine; i++) {
     while (true) {
-      const y = Math.floor(Math.random() * h);
-      const x = Math.floor(Math.random() * w);
-      if (data[y][x] === 0) {
-        data[y][x] = 1;
-        msTable.rows[y].cells[x].bomb = true;
+      const y = Math.floor(Math.random() * height);
+      const x = Math.floor(Math.random() * width);
+      if (property[y][x] === 0) {
+        property[y][x] = 1;
         break;
       }
     }
   }
 }
 
-// 左クリック マスを空ける
-function leftClicked() {
-  const y = this.parentNode.rowIndex;
-  const x = this.cellIndex;
+/**
+ * 左クリック
+ */
+function clickLeft() {
+  const y = this.parentNode.rowIndex; //trの座標
+  const x = this.cellIndex; //tdの座標
 
   if (this.isOpen || this.flag) {
     return;
   }
-
-  if (!data.length) {
+  /**
+   * 初めてクリックした時,全てのマス分のproperty[][]にステータスを入れる.
+   * （1：爆弾、0：何もない、-1：最初にクリックされたマスとその周り８マス）
+   */
+  if (!property.length) {
     startTime = Date.now();
     timer();
-    for (let i = 0; i < h; i++) {
-      data[i] = Array(w).fill(0);
+    for (let i = 0; i < height; i++) {
+      property[i] = Array(width).fill(0);
     }
     for (let i = y - 1; i <= y + 1; i++) {
       for (let j = x - 1; j <= x + 1; j++) {
-        if (i >= 0 && i < h && j >= 0 && j < w) {
-          data[i][j] = -1;
+        if (i >= 0 && i < height && j >= 0 && j < width) {
+          property[i][j] = -1;
         }
       }
     }
-    putBomb();
+    setMine();
   }
 
-  // 爆弾を踏んだか判定
-  if (data[y][x] === 1) {
-    for (let i = 0; i < h; i++) {
-      for (let j = 0; j < w; j++) {
-        if (data[i][j] === 1) {
-          // 爆弾を全部出す
-          msTable.rows[i].cells[j].style.background = "red";
-          msTable.rows[i].cells[j].textContent = "💣";
+  /**
+   * 爆弾を踏んだ時
+   */
+  if (property[y][x] === 1) {
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        const td = msTable.rows[i].cells[j];
+        if (property[i][j] === 1) {
+          td.style.background = "red";
+          td.textContent = "💣";
         } else {
-          msTable.rows[i].cells[j].style.background = "#8B4513";
+          td.style.background = "#8B4513";
           if (countBomb(i, j) !== 0) {
-            msTable.rows[i].cells[j].textContent = countBomb(i, j);
+            td.textContent = countBomb(i, j);
           }
         }
       }
     }
-    msTable.style.pointerEvents = "none";
-    console.log("Game Over");
 
     clearTimeout(timeoutId);
-    // alert & フォワード
     setTimeout(function () {
       if (window.confirm("Game over")) {
         location.reload();
@@ -116,35 +116,31 @@ function leftClicked() {
     return;
   }
 
-  let bombs = countBomb(y, x);
-  if (bombs === 0) {
+  let mines = countBomb(y, x);
+  if (mines === 0) {
     open(y, x);
     msTable.rows[y].cells[x].style.background = "#8B4513";
   } else {
-    this.textContent = bombs;
+    this.textContent = mines;
     this.isOpen = true;
     msTable.rows[y].cells[x].style.background = "#8B4513";
   }
 
   // クリア判定
-  if (countOpenCell()) {
-    for (let i = 0; i < h; i++) {
-      for (let j = 0; j < w; j++) {
-        if (data[i][j] === 1) {
+  if (isClear()) {
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        if (property[i][j] === 1) {
           const td = msTable.rows[i].cells[j];
           td.style.background = "pink";
           td.textContent = "🌷";
         }
       }
     }
-    msTable.style.pointerEvents = "none";
-    console.log("Clear");
     clearTimeout(timeoutId);
-    // クリアのconfettiエフェクト
     party.confetti(this, {
       count: party.variation.range(300, 300),
     });
-    // alert & フォワード
     setTimeout(function () {
       if (window.confirm("CLEAR！🤩  Time:" + stopTime + "秒")) {
         location.reload();
@@ -154,13 +150,12 @@ function leftClicked() {
   }
 }
 
-// 右クリック
-function rightClicked(e) {
+/**
+ * 右クリックで旗を立てる関数
+ */
+function clickRight(e) {
   e.preventDefault();
-  if (
-    this.isOpen
-    /*this.className === "open"*/
-  ) {
+  if (this.isOpen) {
     return;
   } else if (this.flag) {
     this.textContent = "";
@@ -171,41 +166,46 @@ function rightClicked(e) {
   }
 }
 
-// マスの周りの爆弾の数を数える
+/**
+ * 爆弾の周りのマスに入れる数字を返す関数
+ * @param {number} y :tdの座標
+ * @param {number} x :trの座標
+ * @returns {number}
+ */
 function countBomb(y, x) {
-  let bombs = 0;
+  let mines = 0;
   for (let i = y - 1; i <= y + 1; i++) {
     for (let j = x - 1; j <= x + 1; j++) {
-      if (i >= 0 && i < h && j >= 0 && j < w) {
-        if (data[i][j] === 1) {
-          bombs++;
+      if (i >= 0 && i < height && j >= 0 && j < width) {
+        if (property[i][j] === 1) {
+          mines++;
         }
       }
     }
   }
-  return bombs;
+  return mines;
 }
 
-// マスを開く
+/**
+ * 周囲にマスを開ける関数
+ * @param {number} y
+ * @param {number} x
+ */
 function open(y, x) {
   for (let i = y - 1; i <= y + 1; i++) {
     for (let j = x - 1; j <= x + 1; j++) {
-      if (i >= 0 && i < h && j >= 0 && j < w) {
-        let bombs = countBomb(i, j);
+      if (i >= 0 && i < height && j >= 0 && j < width) {
+        let mines = countBomb(i, j);
         const td = msTable.rows[i].cells[j];
-        if (td.bomb) {
-          td.style.background = "red";
-          td.textContent = "💣";
-        }
         if (td.isOpen || td.flag) {
           continue;
         }
-        if (bombs === 0) {
+        if (mines === 0) {
           td.isOpen = true;
           td.style.background = "#8B4513";
           open(i, j);
         } else {
-          td.textContent = bombs;
+          td.textContent = mines;
           td.isOpen = true;
           td.style.background = "#8B4513";
         }
@@ -214,31 +214,37 @@ function open(y, x) {
   }
 }
 
-// 空いているマスを数える
-function countOpenCell() {
+/**
+ * クリアか確認する関数
+ */
+function isClear() {
   let openCell = 0;
-  for (let i = 0; i < h; i++) {
-    for (let j = 0; j < w; j++) {
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
       if (msTable.rows[i].cells[j].isOpen) {
         openCell++;
       }
     }
   }
-  if (h * w - openCell === bomb) {
+  if (height * width - openCell === mine) {
     return true;
   }
 }
 
-// タイマー
+/**
+ * タイマー
+ */
 let stopTime;
+let startTime;
+let timeoutId;
 function timer() {
-  const d = new Date(Date.now() - startTime);
-  const s = String(d.getSeconds()).padStart(3, "0");
-  time.textContent = `⏰TIME⏰：${s}`;
-  stopTime = s;
+  const seconds = String(new Date(Date.now() - startTime).getSeconds()); //.padStart(3, "0");
+  time.textContent = `⏰TIME⏰：${seconds}`;
+  stopTime = seconds;
+  // 1秒毎に更新する
   timeoutId = setTimeout(() => {
     timer();
   }, 1000);
 }
 
-init();
+resetGame();
