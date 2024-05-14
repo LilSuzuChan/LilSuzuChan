@@ -1,8 +1,8 @@
 "use strict";
 
-const height = 5; // 縦のマスの数
-const width = 5; // 横のマスの数
-const mine = 3; // 爆弾の数
+const height = 7; // 縦のマスの数
+const width = 7; // 横のマスの数
+const mine = 10; // 爆弾の数
 const msTable = document.getElementById("ms-table");
 const time = document.getElementById("time");
 const property = [];
