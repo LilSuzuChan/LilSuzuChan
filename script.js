@@ -1,8 +1,8 @@
 "use strict";
 
-const height = 7; // 縦のマスの数
-const width = 7; // 横のマスの数
-const mine = 10; // 爆弾の数
+const height = 5; // trの数
+const width = 5; // trあたりのtdの数
+const mine = 3; // 地雷の数
 const msTable = document.getElementById("ms-table");
 const time = document.getElementById("time");
 const property = [];
@@ -10,7 +10,7 @@ const property = [];
 /**
  * ゲーム用のテーブルを作成する関数
  */
-function resetGame() {
+function setGame() {
   clearTimeout(timeoutId);
 
   for (let i = 0; i < height; i++) {
@@ -59,18 +59,18 @@ function setMine() {
 }
 
 /**
- * 左クリック
+ * 左クリックでマスを開ける関数
  */
 function clickLeft() {
-  const y = this.parentNode.rowIndex; //trの座標
-  const x = this.cellIndex; //tdの座標
+  const y = this.parentNode.rowIndex;
+  const x = this.cellIndex;
 
   if (this.isOpen || this.flag) {
     return;
   }
   /**
-   * 初めてクリックした時,全てのマス分のproperty[][]にステータスを入れる.
-   * （1：爆弾、0：何もない、-1：最初にクリックされたマスとその周り８マス）
+   * 初めてクリックした時,全てのマス分のproperty[]にステータスを入れる.
+   * （0：何もなし、1：地雷、2：最初にクリックされたマスとその周り８マス）
    */
   if (!property.length) {
     startTime = Date.now();
@@ -81,7 +81,7 @@ function clickLeft() {
     for (let i = y - 1; i <= y + 1; i++) {
       for (let j = x - 1; j <= x + 1; j++) {
         if (i >= 0 && i < height && j >= 0 && j < width) {
-          property[i][j] = -1;
+          property[i][j] = 2;
         }
       }
     }
@@ -89,19 +89,20 @@ function clickLeft() {
   }
 
   /**
-   * 爆弾を踏んだ時
+   * 地雷を踏んだ時
    */
   if (property[y][x] === 1) {
     for (let i = 0; i < height; i++) {
       for (let j = 0; j < width; j++) {
         const td = msTable.rows[i].cells[j];
+
         if (property[i][j] === 1) {
           td.style.background = "red";
           td.textContent = "💣";
         } else {
           td.style.background = "#8B4513";
-          if (countBomb(i, j) !== 0) {
-            td.textContent = countBomb(i, j);
+          if (countMine(i, j) !== 0) {
+            td.textContent = countMine(i, j);
           }
         }
       }
@@ -116,22 +117,26 @@ function clickLeft() {
     return;
   }
 
-  let mines = countBomb(y, x);
-  if (mines === 0) {
+  /**
+   * 何もないマスを踏んだ時
+   */
+  if (countMine(y, x) === 0) {
     open(y, x);
-    msTable.rows[y].cells[x].style.background = "#8B4513";
   } else {
-    this.textContent = mines;
+    this.textContent = countMine(y, x);
     this.isOpen = true;
-    msTable.rows[y].cells[x].style.background = "#8B4513";
+    this.style.background = "#8B4513";
   }
 
-  // クリア判定
+  /**
+   * 地雷以外を全て開けられた時
+   */
   if (isClear()) {
     for (let i = 0; i < height; i++) {
       for (let j = 0; j < width; j++) {
+        const td = msTable.rows[i].cells[j];
+
         if (property[i][j] === 1) {
-          const td = msTable.rows[i].cells[j];
           td.style.background = "pink";
           td.textContent = "🌷";
         }
@@ -145,13 +150,14 @@ function clickLeft() {
       if (window.confirm("CLEAR！🤩  Time:" + stopTime + "秒")) {
         location.reload();
       }
-    }, 1500);
+    }, 2200);
     return;
   }
 }
 
 /**
  * 右クリックで旗を立てる関数
+ * @param {Event} e
  */
 function clickRight(e) {
   e.preventDefault();
@@ -167,12 +173,12 @@ function clickRight(e) {
 }
 
 /**
- * 爆弾の周りのマスに入れる数字を返す関数
+ * 地雷の周りのマスに入れる数字を返す関数
  * @param {number} y :tdの座標
  * @param {number} x :trの座標
  * @returns {number}
  */
-function countBomb(y, x) {
+function countMine(y, x) {
   let mines = 0;
   for (let i = y - 1; i <= y + 1; i++) {
     for (let j = x - 1; j <= x + 1; j++) {
@@ -187,7 +193,7 @@ function countBomb(y, x) {
 }
 
 /**
- * 周囲にマスを開ける関数
+ * 周囲のマスを開ける関数
  * @param {number} y
  * @param {number} x
  */
@@ -195,7 +201,7 @@ function open(y, x) {
   for (let i = y - 1; i <= y + 1; i++) {
     for (let j = x - 1; j <= x + 1; j++) {
       if (i >= 0 && i < height && j >= 0 && j < width) {
-        let mines = countBomb(i, j);
+        let mines = countMine(i, j);
         const td = msTable.rows[i].cells[j];
         if (td.isOpen || td.flag) {
           continue;
@@ -238,7 +244,7 @@ let stopTime;
 let startTime;
 let timeoutId;
 function timer() {
-  const seconds = String(new Date(Date.now() - startTime).getSeconds()); //.padStart(3, "0");
+  const seconds = String(new Date(Date.now() - startTime).getSeconds());
   time.textContent = `⏰TIME⏰：${seconds}`;
   stopTime = seconds;
   // 1秒毎に更新する
@@ -247,4 +253,4 @@ function timer() {
   }, 1000);
 }
 
-resetGame();
+setGame();
