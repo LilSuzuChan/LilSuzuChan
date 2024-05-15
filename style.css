@@ -64,14 +64,25 @@ h2 {
   font-weight: 100;
 }
 
-.time {
+.game-set {
   font-family: Century Schoolbook, Century Schoolbook L, Georgia, serif;
-  width: 30%;
-  height : 5%;
+  width: 20%;
   margin: auto;
-  font-size: x-large;
+  /* padding-top: 1%;
+  padding-bottom: 1%; */
+  font-size: large;
   text-align: center;
   background: rgba(255, 255, 255, 0.3);
+}
+
+#button {
+  width: 50%;
+  margin: 3px auto;
+  text-align: center;
+  color: white;
+  border: solid 2px white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #ms-table {
