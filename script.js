@@ -1,22 +1,29 @@
 "use strict";
 
-const height = 5; // trの数
-const width = 5; // trあたりのtdの数
-const mine = 3; // 地雷の数
+let side; // 辺の長さ（マスの数）
+let mine; // 地雷の数
+const button = document.getElementById("button");
+button.addEventListener("click", setGame);
 const msTable = document.getElementById("ms-table");
 const time = document.getElementById("time");
-const property = [];
+const property = []; // マスのプロパティを入れるための配列
 
 /**
  * ゲーム用のテーブルを作成する関数
  */
 function setGame() {
-  clearTimeout(timeoutId);
+  // if (document.getElementsByTagName("tr").length) {
+  //   for (const element of document.getElementsByTagName("tr")) {
+  //     element.remove();
+  //   }
+  // }
 
-  for (let i = 0; i < height; i++) {
+  side = Number(document.getElementById("side").value);
+  mine = Math.trunc(side * side * 0.2);
+  for (let i = 0; i < side; i++) {
     const tr = document.createElement("tr");
 
-    for (let j = 0; j < width; j++) {
+    for (let j = 0; j < side; j++) {
       const td = document.createElement("td");
       td.addEventListener("click", clickLeft);
       td.addEventListener("contextmenu", clickRight);
@@ -48,8 +55,8 @@ function setGame() {
 function setMine() {
   for (let i = 0; i < mine; i++) {
     while (true) {
-      const y = Math.floor(Math.random() * height);
-      const x = Math.floor(Math.random() * width);
+      const y = Math.floor(Math.random() * side);
+      const x = Math.floor(Math.random() * side);
       if (property[y][x] === 0) {
         property[y][x] = 1;
         break;
@@ -75,12 +82,12 @@ function clickLeft() {
   if (!property.length) {
     startTime = Date.now();
     timer();
-    for (let i = 0; i < height; i++) {
-      property[i] = Array(width).fill(0);
+    for (let i = 0; i < side; i++) {
+      property[i] = Array(side).fill(0);
     }
     for (let i = y - 1; i <= y + 1; i++) {
       for (let j = x - 1; j <= x + 1; j++) {
-        if (i >= 0 && i < height && j >= 0 && j < width) {
+        if (i >= 0 && i < side && j >= 0 && j < side) {
           property[i][j] = 2;
         }
       }
@@ -92,8 +99,8 @@ function clickLeft() {
    * 地雷を踏んだ時
    */
   if (property[y][x] === 1) {
-    for (let i = 0; i < height; i++) {
-      for (let j = 0; j < width; j++) {
+    for (let i = 0; i < side; i++) {
+      for (let j = 0; j < side; j++) {
         const td = msTable.rows[i].cells[j];
 
         if (property[i][j] === 1) {
@@ -108,7 +115,7 @@ function clickLeft() {
       }
     }
 
-    clearTimeout(timeoutId);
+    clearTimeout(timeout);
     setTimeout(function () {
       if (window.confirm("Game over")) {
         location.reload();
@@ -132,8 +139,8 @@ function clickLeft() {
    * 地雷以外を全て開けられた時
    */
   if (isClear()) {
-    for (let i = 0; i < height; i++) {
-      for (let j = 0; j < width; j++) {
+    for (let i = 0; i < side; i++) {
+      for (let j = 0; j < side; j++) {
         const td = msTable.rows[i].cells[j];
 
         if (property[i][j] === 1) {
@@ -142,7 +149,7 @@ function clickLeft() {
         }
       }
     }
-    clearTimeout(timeoutId);
+    clearTimeout(timeout);
     party.confetti(this, {
       count: party.variation.range(300, 300),
     });
@@ -176,13 +183,13 @@ function clickRight(e) {
  * 地雷の周りのマスに入れる数字を返す関数
  * @param {number} y :tdの座標
  * @param {number} x :trの座標
- * @returns {number}
+ * @returns {number} :そのマスに入る数字
  */
 function countMine(y, x) {
   let mines = 0;
   for (let i = y - 1; i <= y + 1; i++) {
     for (let j = x - 1; j <= x + 1; j++) {
-      if (i >= 0 && i < height && j >= 0 && j < width) {
+      if (i >= 0 && i < side && j >= 0 && j < side) {
         if (property[i][j] === 1) {
           mines++;
         }
@@ -200,7 +207,7 @@ function countMine(y, x) {
 function open(y, x) {
   for (let i = y - 1; i <= y + 1; i++) {
     for (let j = x - 1; j <= x + 1; j++) {
-      if (i >= 0 && i < height && j >= 0 && j < width) {
+      if (i >= 0 && i < side && j >= 0 && j < side) {
         let mines = countMine(i, j);
         const td = msTable.rows[i].cells[j];
         if (td.isOpen || td.flag) {
@@ -225,14 +232,14 @@ function open(y, x) {
  */
 function isClear() {
   let openCell = 0;
-  for (let i = 0; i < height; i++) {
-    for (let j = 0; j < width; j++) {
+  for (let i = 0; i < side; i++) {
+    for (let j = 0; j < side; j++) {
       if (msTable.rows[i].cells[j].isOpen) {
         openCell++;
       }
     }
   }
-  if (height * width - openCell === mine) {
+  if (side * side - openCell === mine) {
     return true;
   }
 }
@@ -242,15 +249,12 @@ function isClear() {
  */
 let stopTime;
 let startTime;
-let timeoutId;
+let timeout;
 function timer() {
   const seconds = String(new Date(Date.now() - startTime).getSeconds());
   time.textContent = `⏰TIME⏰：${seconds}`;
   stopTime = seconds;
-  // 1秒毎に更新する
-  timeoutId = setTimeout(() => {
+  timeout = setTimeout(() => {
     timer();
   }, 1000);
 }
-
-setGame();
