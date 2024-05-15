@@ -12,19 +12,19 @@ const property = []; // マスのプロパティを入れるための配列
  * ゲーム用のテーブルを作成する関数
  */
 function setGame() {
-  // if (document.getElementsByTagName("tr").length) {
-  //   for (const element of document.getElementsByTagName("tr")) {
-  //     element.remove();
-  //   }
-  // }
-
+  while (document.getElementsByTagName("tr").length) {
+    const tr = document.getElementsByTagName("tr");
+    tr[0].remove();
+  }
   side = Number(document.getElementById("side").value);
   mine = Math.trunc(side * side * 0.2);
+
   for (let i = 0; i < side; i++) {
     const tr = document.createElement("tr");
 
     for (let j = 0; j < side; j++) {
       const td = document.createElement("td");
+
       td.addEventListener("click", clickLeft);
       td.addEventListener("contextmenu", clickRight);
       td.isOpen = false;
@@ -57,6 +57,7 @@ function setMine() {
     while (true) {
       const y = Math.floor(Math.random() * side);
       const x = Math.floor(Math.random() * side);
+
       if (property[y][x] === 0) {
         property[y][x] = 1;
         break;
@@ -210,6 +211,7 @@ function open(y, x) {
       if (i >= 0 && i < side && j >= 0 && j < side) {
         let mines = countMine(i, j);
         const td = msTable.rows[i].cells[j];
+
         if (td.isOpen || td.flag) {
           continue;
         }
@@ -232,6 +234,7 @@ function open(y, x) {
  */
 function isClear() {
   let openCell = 0;
+
   for (let i = 0; i < side; i++) {
     for (let j = 0; j < side; j++) {
       if (msTable.rows[i].cells[j].isOpen) {
@@ -250,8 +253,10 @@ function isClear() {
 let stopTime;
 let startTime;
 let timeout;
+
 function timer() {
   const seconds = String(new Date(Date.now() - startTime).getSeconds());
+
   time.textContent = `⏰TIME⏰：${seconds}`;
   stopTime = seconds;
   timeout = setTimeout(() => {
