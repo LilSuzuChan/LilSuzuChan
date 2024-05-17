@@ -23,27 +23,17 @@
     <title>MineSweeper</title>
 
     <body>
-      <div class="MSimage">
-        <img src="grass3.jpg" alt="Placeholder" />
-      </div>
-      <header>
-        <h1>Mine Sweeper⛑️</h1>
-      </header>
       <main>
-        <div id="fashion">
-          <h2>Mine：鉱山、鉱坑、地雷<br />Sweeper：掃除人；掃除機</h2>
+        <div id="game-set">
+          <div id="time">⏰TIME⏰：0</div>
+          <select id="level">
+            <option selected value="level1">難易度：低</option>
+            <option value="level2">難易度：中</option>
+            <option value="level3">難易度：高</option>
+          </select>
+          <button id="button">reset</button>
         </div>
-        <div class="game-set">
-          <p id="time" style="text-align: center">⏰TIME⏰：0</p>
-          <p>
-            LEVEL<input type="number" id="side" min="3" max="10" value="5" />
-          </p>
-          <div id="button">START</div>
-          <br />
-        </div>
-        <div id="hear">
-          <table id="ms-table"></table>
-        </div>
+        <table id="ms-table"></table>
       </main>
       <script src="script.js"></script>
     </body>
