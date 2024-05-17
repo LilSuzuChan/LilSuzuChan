@@ -1,4 +1,5 @@
 "use strict";
+
 let level;
 let height; // 辺の長さ（縦）
 let width; // 辺の長さ（横）
@@ -169,17 +170,18 @@ function clickLeft() {
           td.style.background = colors[Math.floor(Math.random() * 8)];
           td.textContent = "💣";
         } else {
+          // 空いたマスの色を交互に
           if (j % 2 === 0) {
             if (i % 2 === 0) {
-              td.style.background = "rgba(223, 195, 163)";
-            } else {
               td.style.background = "rgba(210, 185, 157)";
+            } else {
+              td.style.background = "rgba(223, 195, 163)";
             }
           } else {
             if (i % 2 === 0) {
-              td.style.background = "rgba(210, 185, 157)";
-            } else {
               td.style.background = "rgba(223, 195, 163)";
+            } else {
+              td.style.background = "rgba(210, 185, 157)";
             }
           }
           if (countMine(i, j) !== 0) {
@@ -262,17 +264,17 @@ function clickLeft() {
     this.isOpen = true;
 
     // 空いたマスの色を交互に
-    if (y % 2 === 0) {
-      if (x % 2 === 0) {
-        this.style.background = "rgba(223, 195, 163)";
+    if (j % 2 === 0) {
+      if (i % 2 === 0) {
+        td.style.background = "rgba(210, 185, 157)";
       } else {
-        this.style.background = "rgba(210, 185, 157)";
+        td.style.background = "rgba(223, 195, 163)";
       }
     } else {
-      if (x % 2 === 0) {
-        this.style.background = "rgba(210, 185, 157)";
+      if (i % 2 === 0) {
+        td.style.background = "rgba(223, 195, 163)";
       } else {
-        this.style.background = "rgba(223, 195, 163)";
+        td.style.background = "rgba(210, 185, 157)";
       }
     }
   }
@@ -356,17 +358,18 @@ function open(y, x) {
         if (td.isOpen || td.flag) {
           continue;
         }
-        if (i % 2 === 0) {
-          if (j % 2 === 0) {
-            td.style.background = "rgba(223, 195, 163)";
-          } else {
+        // 空いたマスの色を交互に
+        if (j % 2 === 0) {
+          if (i % 2 === 0) {
             td.style.background = "rgba(210, 185, 157)";
+          } else {
+            td.style.background = "rgba(223, 195, 163)";
           }
         } else {
-          if (j % 2 === 0) {
-            td.style.background = "rgba(210, 185, 157)";
-          } else {
+          if (i % 2 === 0) {
             td.style.background = "rgba(223, 195, 163)";
+          } else {
+            td.style.background = "rgba(210, 185, 157)";
           }
         }
         td.isOpen = true;
@@ -403,17 +406,18 @@ function open(y, x) {
               break;
           }
         }
-        if (i % 2 === 0) {
-          if (j % 2 === 0) {
-            td.style.background = "rgba(223, 195, 163)";
-          } else {
+        // 空いたマスの色を交互に
+        if (j % 2 === 0) {
+          if (i % 2 === 0) {
             td.style.background = "rgba(210, 185, 157)";
+          } else {
+            td.style.background = "rgba(223, 195, 163)";
           }
         } else {
-          if (j % 2 === 0) {
-            td.style.background = "rgba(210, 185, 157)";
-          } else {
+          if (i % 2 === 0) {
             td.style.background = "rgba(223, 195, 163)";
+          } else {
+            td.style.background = "rgba(210, 185, 157)";
           }
         }
       }
