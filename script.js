@@ -1,5 +1,4 @@
 "use strict";
-
 let level;
 let height; // 辺の長さ（縦）
 let width; // 辺の長さ（横）
