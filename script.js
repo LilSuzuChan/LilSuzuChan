@@ -289,6 +289,22 @@ function clickLeft() {
         if (property[i][j] === 1) {
           td.style.background = "pink";
           td.textContent = "🌷";
+        } else {
+          td.textContent = "";
+          // 空いたマスの色を交互に
+          if (j % 2 === 0) {
+            if (i % 2 === 0) {
+              td.style.background = "rgba(157, 200, 244)";
+            } else {
+              td.style.background = "rgba(145, 195, 245)";
+            }
+          } else {
+            if (i % 2 === 0) {
+              td.style.background = "rgba(145, 195, 245)";
+            } else {
+              td.style.background = "rgba(157, 200, 244)";
+            }
+          }
         }
       }
     }
