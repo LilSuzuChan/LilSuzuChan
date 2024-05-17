@@ -1,12 +1,8 @@
 @charset "UTF-8";
-@font-face {
-  font-family: Moderne Sans;
-  src: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/moderne_sans.woff2);
-}
+
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   background: rgba(51, 51, 51);
@@ -14,15 +10,17 @@ body {
 }
 
 #game-set {
+  color: white;
   margin: auto;
   margin-top: 150px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   text-align: center;
   background: rgba(84, 166, 54);
 }
 
 #button {
-  width: 20%;
-  /* margin: 3px auto; */
+  width: 5%;
   text-align: center;
   background: white;
   border-radius: 5px;
