@@ -4,6 +4,7 @@ let level;
 let height; // 辺の長さ（縦）
 let width; // 辺の長さ（横）
 let mine; // 地雷の数
+let flag; // 残りの爆弾の数
 const property = []; // マスのプロパティを入れるための配列
 const button = document.getElementById("button");
 button.addEventListener("click", setGame);
@@ -43,6 +44,7 @@ function setGame() {
       break;
   }
   mine = Math.trunc(height * width * 0.2);
+  flag = 0;
 
   // マスを作る
   for (let i = 0; i < height; i++) {
@@ -165,7 +167,7 @@ function clickLeft() {
             "rgba(75, 120, 240)",
             "rgba(220, 70, 175)",
           ];
-          td.style.background = colors[Math.floor(Math.random() * 9)];
+          td.style.background = colors[Math.floor(Math.random() * 8)];
           td.textContent = "💣";
         } else {
           if (j % 2 === 0) {
@@ -215,11 +217,14 @@ function clickLeft() {
     }
 
     clearTimeout(timeout);
+    party.confetti(this, {
+      count: party.variation.range(300, 300),
+    });
     setTimeout(function () {
       if (window.confirm("Game over")) {
         location.reload();
       }
-    }, 200);
+    }, 2200);
     return;
   }
 
@@ -256,6 +261,7 @@ function clickLeft() {
         break;
     }
     this.isOpen = true;
+
     // 空いたマスの色を交互に
     if (y % 2 === 0) {
       if (x % 2 === 0) {
@@ -271,7 +277,6 @@ function clickLeft() {
       }
     }
   }
-
   /**
    * 地雷以外を全て開けられた時
    */
@@ -287,16 +292,14 @@ function clickLeft() {
       }
     }
     clearTimeout(timeout);
-    party.confetti(this, {
-      count: party.variation.range(300, 300),
-    });
     setTimeout(function () {
       if (window.confirm("CLEAR！🤩  Time:" + stopTime + "秒")) {
         location.reload();
       }
-    }, 2200);
+    }, 200);
     return;
   }
+  document.getElementById("mine").textContent = "　🚩：" + (mine - flag);
 }
 
 /**
@@ -310,10 +313,13 @@ function clickRight(e) {
   } else if (this.flag) {
     this.textContent = "";
     this.flag = false;
+    flag = flag - 1;
   } else {
     this.textContent = "🚩";
     this.flag = true;
+    flag = flag + 1;
   }
+  document.getElementById("mine").textContent = "　🚩：" + (mine - flag);
 }
 
 /**
