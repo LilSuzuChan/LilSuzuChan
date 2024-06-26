@@ -1,3 +1,1 @@
 ### Hi there 👋
-
-LilSuzuChan へようこそ。
