@@ -1,16 +1,12 @@
-## Hi there 👋
+### Hi there 👋
 
-<!--
-**LilSuzuChan/LilSuzuChan** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+I'm a beginner Platform Engineer who is steadily expanding my skills.  
+Sincerity is the core principle that guides how I work, how I communicate,  
+and how I continue growing as an engineer.  
+I aim to contribute with honesty, consistency, and a long-term mindset.
 
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+### 🛠️ Tech Interests & Skills
+- **Cloud:** AWS / Azure  
+- **Infrastructure as Code:** Terraform, CloudFormation, CDK   
+- **DevOps & Platform Engineering:** CI/CD, Observability, automation, secure pipelines  
+- **Containers:** Docker, Kubernetes (beginner)  
