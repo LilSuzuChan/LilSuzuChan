@@ -1,12 +1,13 @@
-### Hi there 👋
+### Hello, World! I'm Suzuka.
 
-I'm a beginner Platform Engineer who is steadily expanding my skills.  
-Sincerity is the core principle that guides how I work, how I communicate,  
-and how I continue growing as an engineer.  
-I aim to contribute with honesty, consistency, and a long-term mindset.
+I'm a software engineer who simply loves building things.
 
-### 🛠️ Tech Interests & Skills
-- **Cloud:** AWS / Azure  
-- **Infrastructure as Code:** Terraform, CloudFormation, CDK   
-- **DevOps & Platform Engineering:** CI/CD, Observability, automation, secure pipelines  
-- **Containers:** Docker, Kubernetes (beginner)  
+From web applications to cloud infrastructure, from containers to Kubernetes clusters, I enjoy exploring the entire stack and understanding how all the pieces fit together.
+
+I started my journey in application development and gradually found myself drawn to infrastructure, distributed systems, and platform engineering. Today, I'm particularly interested in cloud-native technologies, developer tools, and building open-source software.
+
+I also spend my time experimenting with machine learning, running my own Kubernetes homelab, and exploring ideas that connect software engineering with real-world challenges.
+
+I believe the joy of engineering lies not only in the finished product, but also in the process of learning, experimenting, failing, and figuring things out.
+
+**I build to learn, and I learn because I love to build.**( ◜ᴗ¯) 🤝 (¯ᴗ◝ )
