@@ -1,13 +1,13 @@
-### Hello, World! I'm Suzuka.
+### Hi, I'm Suzuka.
 
-I'm a software engineer who simply loves building things.
+I'm a software engineer, a lifelong learner, and someone who finds genuine joy in understanding and creating things.
 
-From web applications to cloud infrastructure, from containers to Kubernetes clusters, I enjoy exploring the entire stack and understanding how all the pieces fit together.
+I work with cloud infrastructure, Kubernetes, and full-stack development, but I don't see engineering as a collection of tools or technologies. What excites me most is the process of asking questions, exploring unfamiliar concepts, and gradually turning ideas into working systems.
 
-I started my journey in application development and gradually found myself drawn to infrastructure, distributed systems, and platform engineering. Today, I'm particularly interested in cloud-native technologies, developer tools, and building open-source software.
+My interests often take me beyond software engineering, into mathematics, statistics, machine learning, philosophy, and social issues.
 
-I also spend my time experimenting with machine learning, running my own Kubernetes homelab, and exploring ideas that connect software engineering with real-world challenges.
+I don't believe every project needs to become a business, or every new skill needs to advance a career. Sometimes, learning something simply because it's fascinating is reason enough.
 
-I believe the joy of engineering lies not only in the finished product, but also in the process of learning, experimenting, failing, and figuring things out.
+This GitHub is a collection of my experiments, ideas, unfinished explorations, and things I've built along the way.
 
-**I build to learn, and I learn because I love to build.**( ◜ᴗ¯) 🤝 (¯ᴗ◝ )
+**Driven by curiosity, not just productivity.**
